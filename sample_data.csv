@@ -1,0 +1,801 @@
+gender,age_group,income,education_level,hired
+Female,30-50,58366,Bachelor,1
+Male,<30,49704,High School,1
+Male,30-50,57014,Bachelor,0
+Male,30-50,45521,Bachelor,1
+Female,30-50,70681,High School,1
+Female,30-50,54600,Bachelor,1
+Female,>50,74675,High School,1
+Male,>50,38882,Bachelor,0
+Male,30-50,76617,Bachelor,1
+Male,<30,86670,High School,1
+Female,>50,30125,Master,1
+Male,>50,77481,High School,1
+Male,<30,94553,High School,1
+Female,>50,45807,Bachelor,1
+Female,>50,103451,Bachelor,1
+Female,30-50,78380,High School,1
+Female,30-50,55899,Bachelor,1
+Female,30-50,68884,Bachelor,1
+Female,<30,81166,Master,1
+Female,<30,71520,Bachelor,1
+Male,>50,80775,Master,1
+Female,<30,51586,Master,1
+Female,<30,73387,Bachelor,1
+Female,30-50,41725,Master,1
+Female,30-50,67775,Bachelor,1
+Male,>50,51921,Master,1
+Female,<30,55289,High School,0
+Female,<30,94721,Bachelor,1
+Male,30-50,91826,Bachelor,1
+Female,30-50,82182,Bachelor,1
+Male,<30,48153,Bachelor,1
+Female,30-50,63671,Bachelor,0
+Female,<30,94261,High School,1
+Male,<30,72834,High School,1
+Male,30-50,116386,Bachelor,1
+Male,30-50,77866,Bachelor,1
+Female,>50,73840,Master,1
+Female,30-50,63817,Master,1
+Male,30-50,72670,Master,1
+Female,30-50,66950,Bachelor,1
+Female,<30,84162,Bachelor,1
+Female,30-50,89134,High School,1
+Female,<30,54280,Master,1
+Male,>50,43375,Bachelor,0
+Female,<30,33275,High School,0
+Male,30-50,80159,Bachelor,1
+Female,<30,47932,Master,0
+Female,>50,26942,Bachelor,0
+Female,30-50,77771,Bachelor,1
+Female,30-50,119859,Bachelor,1
+Male,<30,69878,High School,1
+Male,30-50,86769,Bachelor,1
+Male,<30,71636,Bachelor,1
+Male,>50,68022,High School,1
+Male,<30,88381,Master,1
+Male,<30,64194,Bachelor,1
+Female,<30,75347,Master,1
+Female,30-50,76433,Master,1
+Female,30-50,56638,High School,0
+Female,<30,89840,Bachelor,1
+Female,30-50,66500,Bachelor,1
+Female,30-50,54885,Master,1
+Male,30-50,80730,High School,1
+Female,30-50,52030,Bachelor,1
+Female,30-50,70563,Bachelor,1
+Female,30-50,69817,Bachelor,1
+Female,<30,91717,High School,1
+Male,<30,79493,Bachelor,1
+Female,>50,69499,Bachelor,1
+Male,>50,86355,Bachelor,1
+Male,30-50,97804,Bachelor,1
+Female,<30,81156,Bachelor,1
+Female,30-50,70207,Bachelor,1
+Male,30-50,43763,High School,1
+Male,<30,48697,Master,1
+Male,<30,63895,Bachelor,1
+Male,30-50,57809,Bachelor,1
+Female,30-50,66260,High School,1
+Female,<30,71132,High School,1
+Female,<30,80593,Bachelor,1
+Male,<30,68590,Bachelor,1
+Male,30-50,79730,Master,1
+Female,<30,71289,High School,1
+Female,<30,30490,Bachelor,0
+Female,30-50,51213,Bachelor,1
+Female,<30,67118,High School,1
+Male,30-50,45806,High School,1
+Male,<30,81998,Bachelor,1
+Male,<30,100615,Bachelor,1
+Female,<30,94375,Bachelor,1
+Female,30-50,65731,Bachelor,1
+Male,>50,99814,Bachelor,1
+Male,>50,72973,High School,1
+Male,30-50,63258,Bachelor,1
+Male,30-50,57731,Master,1
+Female,<30,63950,Bachelor,1
+Female,<30,62236,Bachelor,0
+Female,>50,73408,Bachelor,1
+Female,<30,73211,Master,1
+Female,<30,70060,Master,1
+Female,<30,78738,Bachelor,1
+Male,<30,93812,Master,1
+Female,<30,88991,High School,0
+Female,30-50,40302,High School,1
+Male,30-50,18921,Master,0
+Female,>50,88686,Master,1
+Female,>50,42662,High School,0
+Male,<30,65504,Bachelor,1
+Female,<30,46597,High School,0
+Female,30-50,33960,Bachelor,1
+Female,30-50,80829,Master,1
+Female,<30,85183,Bachelor,1
+Male,30-50,58469,Bachelor,0
+Male,30-50,18179,Bachelor,0
+Male,30-50,59075,High School,1
+Male,30-50,77836,Bachelor,1
+Male,<30,40421,Bachelor,1
+Female,>50,73667,Master,1
+Male,30-50,69693,Master,1
+Female,<30,81585,High School,1
+Male,>50,72391,Master,1
+Male,30-50,50538,Master,1
+Female,>50,93931,Master,1
+Female,30-50,66829,Bachelor,1
+Female,30-50,69453,Bachelor,1
+Female,<30,51334,Bachelor,1
+Male,<30,61134,High School,0
+Male,30-50,52303,High School,1
+Female,30-50,66541,High School,0
+Female,<30,104234,Bachelor,1
+Female,<30,42561,Bachelor,1
+Female,>50,37728,Bachelor,0
+Female,>50,99423,High School,1
+Female,30-50,65813,Master,1
+Male,<30,56618,Master,1
+Female,<30,90798,Master,1
+Female,<30,57887,Master,1
+Male,>50,106520,Bachelor,1
+Female,<30,83558,Master,1
+Male,30-50,60241,High School,1
+Male,<30,113146,Bachelor,1
+Female,30-50,57885,High School,0
+Female,30-50,84841,High School,1
+Female,>50,75985,High School,1
+Female,<30,96034,Bachelor,1
+Female,<30,101230,Master,1
+Male,<30,70640,Bachelor,1
+Female,>50,54931,High School,1
+Female,>50,79199,Master,1
+Female,30-50,56445,Bachelor,1
+Male,30-50,110267,Bachelor,1
+Female,30-50,72730,Bachelor,1
+Female,<30,62693,Bachelor,1
+Female,>50,73693,Bachelor,1
+Male,30-50,43057,Master,1
+Female,30-50,50567,Bachelor,1
+Male,30-50,94008,Bachelor,1
+Male,<30,56862,Master,1
+Female,<30,49061,Bachelor,1
+Male,30-50,80733,High School,1
+Female,<30,93714,High School,1
+Male,30-50,84379,High School,1
+Male,<30,89920,Bachelor,1
+Female,30-50,54864,Bachelor,1
+Female,<30,41563,High School,0
+Male,30-50,100026,Master,1
+Female,30-50,63546,Bachelor,1
+Female,<30,64983,High School,1
+Female,30-50,96563,Bachelor,1
+Male,30-50,81124,Bachelor,1
+Male,30-50,79117,High School,1
+Female,>50,113300,Bachelor,1
+Female,30-50,57129,Master,1
+Female,<30,88556,Bachelor,0
+Male,<30,71140,Bachelor,1
+Female,<30,75371,Bachelor,1
+Male,30-50,100569,High School,1
+Female,<30,80156,High School,1
+Male,30-50,80765,Bachelor,1
+Female,30-50,91450,High School,1
+Female,<30,62700,High School,1
+Female,30-50,53215,Master,1
+Male,<30,49103,Master,1
+Male,<30,30672,Master,0
+Female,30-50,111124,Master,1
+Male,30-50,47935,High School,1
+Male,30-50,65574,Master,1
+Male,30-50,64463,High School,1
+Female,<30,76148,Master,1
+Female,>50,86314,Master,1
+Female,30-50,87209,Bachelor,1
+Male,30-50,58338,Master,1
+Male,<30,66657,Bachelor,1
+Male,30-50,75651,Bachelor,1
+Female,30-50,65026,Bachelor,1
+Female,<30,102146,Bachelor,1
+Male,>50,79819,High School,1
+Male,<30,84697,Bachelor,1
+Male,>50,83257,Master,1
+Male,30-50,93469,High School,1
+Male,<30,73620,Master,1
+Female,30-50,44063,Master,1
+Female,>50,77993,Master,1
+Male,30-50,56972,Master,1
+Male,>50,59427,Bachelor,1
+Female,30-50,81727,Master,1
+Female,30-50,94765,Master,1
+Male,>50,70425,High School,1
+Female,<30,76176,Bachelor,1
+Female,30-50,104044,Bachelor,1
+Female,<30,74815,High School,1
+Male,>50,122033,Bachelor,1
+Male,>50,81310,Bachelor,1
+Female,<30,34784,High School,0
+Male,30-50,85066,Bachelor,1
+Female,>50,77623,Master,1
+Female,<30,95795,Bachelor,1
+Male,30-50,83463,High School,1
+Male,>50,67230,High School,1
+Male,<30,45514,Bachelor,1
+Male,30-50,65819,Master,1
+Male,<30,52989,High School,1
+Female,>50,58389,Bachelor,1
+Female,>50,81771,High School,1
+Female,>50,103398,Bachelor,1
+Female,30-50,77893,Master,1
+Male,>50,46082,Bachelor,1
+Female,>50,78892,High School,1
+Male,<30,93932,Bachelor,1
+Male,>50,57804,High School,1
+Male,<30,67319,Bachelor,1
+Female,30-50,70293,Bachelor,1
+Male,<30,54302,High School,1
+Female,<30,82965,Bachelor,1
+Female,<30,67581,Bachelor,1
+Male,30-50,78390,Master,1
+Female,<30,52250,Master,0
+Female,30-50,61250,High School,1
+Male,<30,84447,Master,1
+Female,<30,62543,Bachelor,1
+Male,30-50,104539,Bachelor,1
+Male,30-50,62007,Master,1
+Male,<30,74493,Master,1
+Female,30-50,88651,Master,1
+Female,>50,41632,Bachelor,0
+Male,30-50,34783,Bachelor,1
+Female,<30,39486,Master,1
+Male,<30,95251,Bachelor,1
+Male,>50,58962,Bachelor,1
+Male,<30,121163,Bachelor,1
+Female,>50,58715,Bachelor,1
+Female,30-50,73691,High School,1
+Male,>50,100842,High School,1
+Female,30-50,110121,Master,1
+Female,>50,111230,High School,1
+Male,30-50,94167,Bachelor,1
+Male,30-50,90481,High School,1
+Male,30-50,81850,High School,1
+Male,30-50,85567,High School,1
+Female,30-50,58976,High School,0
+Male,>50,53636,Master,1
+Male,>50,69932,Bachelor,1
+Female,30-50,66596,Master,1
+Female,30-50,60935,Bachelor,1
+Male,30-50,83927,Bachelor,1
+Male,30-50,89106,Bachelor,1
+Male,<30,71768,Bachelor,1
+Male,<30,99550,Master,1
+Female,30-50,47166,Bachelor,1
+Female,<30,66126,Bachelor,1
+Male,<30,55663,Master,1
+Male,<30,32669,Master,1
+Male,<30,68346,Master,1
+Male,<30,67565,Bachelor,1
+Female,>50,100268,Master,1
+Female,30-50,82616,Bachelor,1
+Male,30-50,49516,Bachelor,1
+Male,30-50,107081,High School,1
+Male,<30,94420,Bachelor,1
+Male,>50,81641,High School,1
+Male,30-50,65470,Bachelor,1
+Female,<30,50811,Master,1
+Female,30-50,62555,High School,1
+Female,>50,91774,High School,1
+Male,>50,107691,High School,1
+Female,30-50,100864,Master,1
+Female,30-50,60223,Bachelor,0
+Female,<30,47607,Bachelor,1
+Female,>50,72817,Master,1
+Male,<30,34631,Master,1
+Female,>50,76463,Bachelor,1
+Female,30-50,67047,Bachelor,1
+Male,30-50,60679,Master,1
+Female,30-50,38105,Bachelor,1
+Female,<30,80272,High School,1
+Female,<30,59345,Master,1
+Male,<30,46601,Bachelor,0
+Female,<30,12554,Bachelor,0
+Male,30-50,69449,Bachelor,1
+Female,30-50,105445,High School,1
+Female,<30,103225,High School,1
+Female,>50,60858,Master,1
+Female,>50,57955,High School,1
+Male,>50,79375,Bachelor,1
+Male,>50,50032,Bachelor,0
+Male,<30,76035,High School,1
+Female,30-50,85321,Master,1
+Female,30-50,94538,High School,1
+Male,30-50,67996,Bachelor,1
+Female,<30,65926,Bachelor,0
+Female,>50,52440,High School,1
+Female,<30,53462,High School,0
+Female,<30,65470,Bachelor,1
+Male,30-50,77347,Master,1
+Male,30-50,88271,High School,1
+Male,30-50,53936,Bachelor,1
+Female,<30,99853,Bachelor,1
+Female,>50,64577,Master,1
+Female,<30,69572,Bachelor,1
+Female,<30,55055,Bachelor,1
+Female,>50,21515,Bachelor,0
+Male,>50,87680,Bachelor,1
+Male,>50,84736,Master,1
+Female,>50,64373,High School,1
+Male,30-50,71339,Bachelor,1
+Male,30-50,80318,Master,1
+Male,<30,38749,Master,1
+Male,30-50,59418,Master,1
+Female,30-50,85885,Master,1
+Female,<30,44914,Bachelor,0
+Female,30-50,75871,Bachelor,1
+Male,30-50,42868,Bachelor,0
+Female,<30,79328,High School,1
+Female,<30,69287,Bachelor,1
+Female,30-50,37697,Bachelor,1
+Female,<30,93294,High School,1
+Male,>50,55308,Master,1
+Male,30-50,53794,Bachelor,1
+Female,30-50,74011,Master,1
+Female,30-50,92972,High School,1
+Female,>50,49683,Bachelor,0
+Female,<30,71233,Bachelor,1
+Female,30-50,78576,Bachelor,1
+Female,30-50,83862,Bachelor,1
+Female,<30,73528,Master,1
+Male,>50,62659,High School,1
+Male,30-50,53448,Bachelor,1
+Female,30-50,71722,Bachelor,1
+Female,>50,48557,Bachelor,1
+Male,>50,11572,Master,0
+Female,30-50,78731,Master,1
+Male,>50,88078,Bachelor,1
+Male,30-50,22741,Bachelor,1
+Female,30-50,49805,Bachelor,1
+Female,30-50,82383,Master,1
+Male,30-50,111149,Bachelor,1
+Female,<30,70415,Bachelor,1
+Male,>50,55439,Master,1
+Male,>50,66342,Bachelor,1
+Male,<30,97497,Master,1
+Female,>50,57080,High School,1
+Male,<30,54016,Bachelor,1
+Female,<30,60345,Bachelor,1
+Female,30-50,50933,Master,1
+Male,<30,72453,Master,1
+Female,>50,102493,Bachelor,1
+Male,>50,76461,Bachelor,1
+Male,30-50,64952,Bachelor,1
+Female,<30,64163,Master,1
+Female,<30,38736,Bachelor,1
+Female,30-50,87662,Bachelor,1
+Female,>50,68443,High School,0
+Female,30-50,66390,Master,1
+Male,<30,133862,Bachelor,1
+Female,30-50,75975,Bachelor,1
+Female,30-50,54964,High School,0
+Male,30-50,61472,Master,1
+Female,<30,92968,High School,1
+Male,30-50,72265,Bachelor,1
+Female,30-50,41234,Master,0
+Female,>50,88384,Bachelor,1
+Male,<30,56637,High School,1
+Male,30-50,107465,Bachelor,1
+Male,>50,91600,Master,1
+Male,<30,61053,Bachelor,1
+Male,>50,95620,Master,1
+Female,30-50,71357,High School,1
+Female,<30,87055,Bachelor,1
+Male,<30,79694,Bachelor,1
+Male,30-50,53072,Master,0
+Male,<30,57129,High School,1
+Female,30-50,90599,Master,1
+Female,<30,63304,Bachelor,1
+Male,30-50,61927,Bachelor,1
+Female,<30,50897,High School,1
+Male,>50,78471,Master,1
+Male,>50,111250,High School,1
+Female,>50,48649,Bachelor,1
+Male,30-50,70484,Bachelor,1
+Male,<30,98244,Master,1
+Female,30-50,68407,Bachelor,1
+Male,<30,79047,Master,1
+Female,<30,48752,Bachelor,0
+Male,<30,78566,Bachelor,1
+Female,30-50,66257,Bachelor,1
+Male,30-50,89714,Master,1
+Female,30-50,93747,Master,1
+Female,30-50,121791,High School,1
+Male,<30,81592,Bachelor,1
+Female,>50,76515,High School,1
+Female,30-50,73887,Bachelor,1
+Male,30-50,62936,Bachelor,1
+Male,<30,76769,Bachelor,1
+Male,30-50,64091,Bachelor,1
+Male,30-50,73369,Bachelor,1
+Female,<30,96351,Bachelor,1
+Female,<30,49869,Bachelor,1
+Female,30-50,92797,Bachelor,1
+Male,30-50,96342,High School,1
+Male,<30,67638,Master,1
+Male,>50,27562,Bachelor,1
+Male,<30,57843,Bachelor,1
+Female,30-50,95939,Bachelor,1
+Female,>50,69542,Bachelor,1
+Female,30-50,50013,High School,1
+Female,30-50,59904,Bachelor,1
+Female,30-50,86812,Master,1
+Male,<30,80934,Bachelor,1
+Female,>50,65221,Bachelor,1
+Female,30-50,62663,Bachelor,1
+Female,>50,62164,High School,1
+Male,<30,51551,Bachelor,1
+Male,<30,102307,Master,1
+Female,<30,63553,High School,1
+Female,30-50,94343,Bachelor,1
+Male,30-50,100426,Bachelor,1
+Female,>50,89966,Bachelor,1
+Male,30-50,61367,Master,1
+Male,>50,78074,High School,1
+Female,<30,69516,Bachelor,1
+Female,>50,51925,High School,1
+Male,30-50,76487,Master,1
+Female,30-50,46419,High School,0
+Female,>50,93753,Bachelor,1
+Male,30-50,60707,Bachelor,1
+Male,30-50,74023,Bachelor,1
+Male,<30,75665,Bachelor,1
+Male,<30,64821,Bachelor,1
+Female,>50,81733,Bachelor,1
+Female,30-50,60501,Bachelor,1
+Male,30-50,87425,High School,1
+Male,30-50,43080,Bachelor,1
+Female,<30,72527,Bachelor,1
+Male,<30,108778,Bachelor,1
+Female,30-50,49993,Bachelor,1
+Female,30-50,56445,Master,1
+Female,<30,80278,Bachelor,1
+Female,30-50,73591,High School,1
+Female,<30,77012,High School,1
+Female,30-50,79783,Master,1
+Female,<30,82694,Bachelor,1
+Male,30-50,92193,High School,1
+Male,<30,78196,Bachelor,1
+Male,30-50,65174,Bachelor,1
+Male,<30,83451,Bachelor,1
+Female,<30,107997,Bachelor,1
+Female,30-50,67347,High School,1
+Male,30-50,50509,Master,1
+Female,30-50,92141,Bachelor,1
+Male,<30,67592,Bachelor,1
+Female,30-50,26546,Bachelor,0
+Male,>50,86948,Bachelor,1
+Female,30-50,59293,Bachelor,1
+Male,<30,68189,Bachelor,1
+Female,30-50,76639,Bachelor,1
+Male,<30,73809,Master,1
+Female,<30,84189,Master,1
+Male,>50,61290,High School,1
+Male,<30,80262,High School,1
+Female,30-50,64809,Master,1
+Male,30-50,84776,Bachelor,1
+Male,30-50,82307,Master,1
+Female,30-50,51291,High School,0
+Male,<30,91719,Bachelor,1
+Male,<30,59280,Bachelor,1
+Male,30-50,86161,Bachelor,1
+Female,<30,77345,Bachelor,1
+Female,30-50,106763,High School,1
+Male,<30,65530,Bachelor,1
+Male,<30,63013,Bachelor,1
+Female,30-50,69611,Bachelor,1
+Male,<30,63936,Master,1
+Female,30-50,85998,Bachelor,1
+Female,30-50,37673,Master,1
+Female,>50,48926,High School,0
+Female,<30,48643,Bachelor,0
+Male,<30,89006,Master,1
+Female,<30,104212,High School,1
+Male,30-50,67911,High School,1
+Male,30-50,66623,Bachelor,1
+Male,<30,71401,High School,1
+Female,>50,93237,Bachelor,1
+Female,<30,51452,Master,0
+Male,30-50,74767,Bachelor,1
+Male,30-50,89503,Bachelor,1
+Female,>50,80021,Bachelor,1
+Male,30-50,73791,Bachelor,1
+Male,>50,90020,High School,1
+Male,<30,15935,Bachelor,0
+Male,>50,83557,Bachelor,1
+Male,<30,56918,Bachelor,1
+Female,>50,33387,High School,0
+Male,30-50,80224,Bachelor,1
+Male,>50,97473,High School,1
+Female,30-50,67251,High School,0
+Female,30-50,89057,Master,1
+Female,30-50,102245,Bachelor,1
+Male,30-50,96298,High School,1
+Male,<30,102799,High School,1
+Female,<30,84842,High School,1
+Male,<30,71508,Bachelor,1
+Female,<30,37960,High School,0
+Male,>50,65078,High School,1
+Male,<30,53135,Bachelor,1
+Male,>50,113418,Bachelor,1
+Female,<30,66482,Bachelor,1
+Female,<30,72464,Bachelor,1
+Female,30-50,81029,High School,1
+Female,30-50,70872,Master,1
+Male,30-50,103901,Master,1
+Male,30-50,57547,Master,1
+Male,30-50,73892,Master,1
+Male,<30,55150,Master,1
+Male,>50,43599,Bachelor,1
+Male,>50,57764,High School,1
+Male,30-50,69259,Bachelor,1
+Male,<30,61413,Bachelor,1
+Female,30-50,56151,Bachelor,1
+Female,<30,41873,Bachelor,1
+Female,<30,68337,High School,1
+Male,<30,39905,Bachelor,0
+Male,30-50,85201,Master,1
+Female,>50,71648,Bachelor,1
+Male,30-50,40848,Bachelor,1
+Male,30-50,63815,Bachelor,1
+Female,30-50,54956,Bachelor,1
+Female,<30,76383,Master,1
+Male,30-50,96809,Bachelor,1
+Female,>50,32496,Master,1
+Male,<30,72300,Bachelor,1
+Female,>50,66797,Bachelor,1
+Male,30-50,83426,High School,1
+Male,30-50,74263,Bachelor,1
+Male,30-50,54960,Bachelor,1
+Male,30-50,63618,Bachelor,1
+Female,>50,54079,Bachelor,0
+Female,>50,91520,Master,1
+Female,30-50,70426,High School,1
+Male,<30,108023,Master,1
+Male,30-50,68786,Bachelor,1
+Male,>50,55831,Bachelor,1
+Female,<30,39725,High School,0
+Female,30-50,33937,Bachelor,1
+Female,30-50,38317,Bachelor,0
+Female,30-50,75342,High School,1
+Male,<30,80174,Bachelor,1
+Female,30-50,38376,Master,1
+Female,>50,87900,High School,1
+Male,<30,60338,Master,1
+Female,<30,72935,Bachelor,1
+Female,>50,102244,Bachelor,1
+Male,<30,87936,Bachelor,1
+Female,>50,64629,High School,1
+Male,30-50,52176,High School,1
+Male,<30,26963,High School,0
+Male,>50,55616,High School,0
+Female,30-50,65777,Bachelor,1
+Male,30-50,50256,Master,1
+Female,30-50,67374,Master,1
+Female,30-50,71537,Bachelor,1
+Female,<30,65502,High School,0
+Male,30-50,56999,Bachelor,1
+Female,>50,73373,Bachelor,1
+Female,<30,78838,High School,1
+Male,30-50,48192,Bachelor,1
+Female,<30,98218,Bachelor,1
+Female,30-50,68028,Bachelor,1
+Female,<30,70376,Bachelor,1
+Female,>50,84164,Master,1
+Female,30-50,74664,Master,1
+Female,<30,89062,Bachelor,1
+Male,<30,75742,Master,1
+Female,<30,57751,Master,1
+Female,30-50,77230,Bachelor,1
+Male,<30,47125,Bachelor,1
+Female,>50,72171,Bachelor,1
+Male,30-50,69335,Master,1
+Female,<30,65837,Master,1
+Female,30-50,67429,High School,1
+Female,30-50,32363,Bachelor,1
+Female,<30,59025,Bachelor,1
+Female,<30,71856,Bachelor,1
+Female,<30,73197,High School,1
+Female,30-50,49446,Master,1
+Female,30-50,95314,Bachelor,1
+Female,30-50,52676,Master,1
+Female,>50,89389,Master,1
+Female,>50,78543,Bachelor,1
+Female,30-50,57075,Bachelor,1
+Male,>50,105506,Bachelor,1
+Female,<30,46127,High School,1
+Male,<30,88383,Bachelor,1
+Male,<30,90011,High School,1
+Female,<30,56587,Bachelor,1
+Male,30-50,97849,High School,1
+Male,>50,64999,High School,1
+Female,<30,75773,High School,1
+Female,<30,75206,High School,0
+Male,30-50,67313,Bachelor,1
+Male,>50,86216,Bachelor,1
+Female,<30,85869,Bachelor,1
+Female,30-50,35029,High School,0
+Female,<30,96086,High School,1
+Female,<30,36750,High School,0
+Male,>50,90650,High School,1
+Female,>50,92534,Master,1
+Female,<30,48180,High School,0
+Male,>50,61783,Bachelor,1
+Female,30-50,47885,High School,0
+Female,>50,65701,High School,1
+Male,30-50,63839,Bachelor,1
+Male,30-50,85593,Bachelor,1
+Female,30-50,96206,High School,1
+Female,30-50,97913,High School,0
+Female,<30,58756,Bachelor,1
+Female,<30,65815,High School,0
+Female,<30,36331,High School,0
+Female,30-50,53882,Master,1
+Female,<30,89297,Bachelor,1
+Female,30-50,102311,Bachelor,1
+Female,>50,45313,Bachelor,0
+Female,<30,58150,Bachelor,1
+Female,30-50,69471,Bachelor,1
+Female,30-50,75603,Bachelor,1
+Female,>50,53807,Bachelor,1
+Male,<30,78481,High School,1
+Male,30-50,60523,Bachelor,1
+Male,>50,69710,Bachelor,1
+Male,>50,80925,Master,1
+Female,30-50,70128,Bachelor,1
+Female,30-50,61272,Bachelor,0
+Female,30-50,67807,High School,1
+Male,>50,68232,Bachelor,1
+Male,30-50,62599,High School,1
+Female,<30,64824,Bachelor,1
+Female,>50,101972,High School,1
+Female,30-50,81218,Bachelor,1
+Female,30-50,64090,High School,1
+Male,<30,83939,Bachelor,1
+Male,30-50,63323,Master,1
+Female,30-50,93462,High School,1
+Male,30-50,77392,Bachelor,1
+Male,<30,67853,Bachelor,1
+Female,30-50,78954,High School,1
+Female,>50,38582,Master,0
+Female,<30,47464,High School,1
+Female,>50,46121,Bachelor,1
+Female,30-50,72858,Bachelor,0
+Female,>50,104650,Bachelor,1
+Female,30-50,114626,Bachelor,1
+Female,30-50,82761,Bachelor,1
+Male,30-50,80016,High School,1
+Female,>50,33978,Bachelor,0
+Female,30-50,59146,Bachelor,1
+Female,<30,54244,Master,1
+Male,30-50,57583,Master,1
+Female,>50,66637,Master,1
+Female,30-50,60558,Bachelor,1
+Male,30-50,30414,Bachelor,0
+Male,30-50,84958,Master,1
+Male,>50,48545,Bachelor,1
+Female,<30,74784,High School,1
+Female,30-50,111481,Master,1
+Male,<30,51612,Master,1
+Male,<30,19394,Bachelor,1
+Male,30-50,64279,High School,1
+Male,30-50,92019,Bachelor,1
+Female,30-50,109166,Master,1
+Male,30-50,45409,Master,1
+Female,30-50,79933,High School,1
+Female,<30,60693,High School,0
+Female,30-50,67881,Master,1
+Female,<30,122886,Bachelor,1
+Female,<30,39940,Bachelor,0
+Female,30-50,75074,Master,1
+Male,30-50,79353,High School,1
+Female,30-50,91715,Bachelor,1
+Male,30-50,71959,High School,1
+Female,30-50,76161,Bachelor,1
+Female,>50,62167,Master,1
+Female,30-50,75382,Bachelor,1
+Female,30-50,63136,Master,1
+Female,<30,82431,Bachelor,1
+Female,<30,62607,Bachelor,1
+Female,30-50,77542,High School,1
+Male,30-50,69414,Bachelor,1
+Female,30-50,92521,Bachelor,1
+Male,30-50,68972,High School,1
+Female,30-50,34539,Bachelor,0
+Male,30-50,95238,Bachelor,1
+Male,>50,51885,Bachelor,1
+Male,30-50,56924,Bachelor,1
+Female,>50,58086,Bachelor,1
+Female,<30,97488,High School,1
+Female,<30,27286,High School,0
+Male,<30,132754,Bachelor,1
+Male,30-50,91121,Bachelor,1
+Male,>50,74464,High School,1
+Female,<30,68902,Master,1
+Male,>50,75711,Master,1
+Male,<30,80422,Bachelor,1
+Female,>50,82904,High School,1
+Female,30-50,81112,Master,1
+Male,<30,71791,Bachelor,1
+Male,30-50,66053,Master,1
+Male,<30,66974,Master,1
+Female,<30,66101,Master,1
+Male,<30,92675,Bachelor,1
+Female,>50,81871,High School,1
+Female,30-50,11192,Bachelor,1
+Female,<30,83118,Bachelor,1
+Male,30-50,73894,Bachelor,1
+Male,30-50,69625,High School,1
+Female,<30,62229,High School,1
+Female,30-50,92482,Master,1
+Male,<30,88950,Bachelor,1
+Female,<30,54542,Master,1
+Male,30-50,78141,Master,1
+Female,<30,50566,Bachelor,0
+Female,30-50,42407,Bachelor,1
+Female,30-50,57465,Master,1
+Female,<30,87247,Bachelor,1
+Male,30-50,89062,Bachelor,1
+Female,<30,80261,High School,1
+Female,>50,84501,Bachelor,1
+Male,30-50,80323,Bachelor,1
+Female,>50,57170,Bachelor,1
+Female,30-50,78638,High School,1
+Male,<30,86008,Bachelor,1
+Male,30-50,85085,High School,1
+Female,>50,93778,High School,1
+Male,30-50,84166,Bachelor,1
+Male,>50,77028,Master,1
+Female,>50,91403,Bachelor,1
+Female,<30,69469,High School,1
+Male,<30,52362,High School,1
+Male,30-50,66738,Bachelor,1
+Female,30-50,55101,Bachelor,0
+Male,>50,56496,Master,1
+Male,>50,67109,Bachelor,1
+Female,30-50,54151,Master,1
+Female,<30,63840,Bachelor,1
+Female,30-50,32127,Bachelor,0
+Male,<30,74265,Bachelor,1
+Female,>50,70024,Master,1
+Male,30-50,53658,Bachelor,1
+Male,30-50,83184,Bachelor,1
+Male,<30,88751,Bachelor,1
+Female,30-50,37848,High School,0
+Male,30-50,54745,Bachelor,1
+Female,30-50,54617,High School,1
+Male,<30,51201,Bachelor,0
+Female,30-50,86589,Bachelor,1
+Female,>50,66123,Bachelor,1
+Male,<30,64709,Master,1
+Female,<30,29922,Master,0
+Female,<30,82708,Master,1
+Male,30-50,45214,High School,0
+Male,30-50,71198,High School,1
+Male,30-50,75547,Bachelor,1
+Male,<30,97213,Bachelor,1
+Female,30-50,43823,Bachelor,0
+Female,30-50,9609,High School,0
+Female,30-50,73676,Bachelor,1
+Female,>50,106010,High School,1
+Male,<30,94778,Master,1
+Male,30-50,74193,High School,1
+Female,30-50,60167,Bachelor,1
+Female,30-50,86142,High School,1
+Male,30-50,50529,Bachelor,1
+Female,30-50,79527,Bachelor,1
+Male,>50,80109,Master,1
+Female,<30,91204,Master,1
+Male,<30,125193,Bachelor,1
+Female,30-50,77848,Master,1
+Male,30-50,59820,Master,1
+Male,<30,69488,Master,1
+Male,<30,34618,Master,1
+Male,<30,56105,High School,1
+Male,>50,61814,Bachelor,1
