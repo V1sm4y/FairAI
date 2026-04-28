@@ -18,6 +18,7 @@ from bias_analysis import (
     run_analysis_workflow,
     save_model_bundle,
 )
+from bias_insights import generate_bias_insights, get_bias_reduction_suggestions
 
 st.set_page_config(
     page_title="FairAI Studio",
@@ -966,6 +967,40 @@ def main():
         with recommendation_col:
             st.markdown("#### Recommended next steps")
             st.markdown(format_bullet_list(analysis["recommendations"]))
+
+        # AI-powered insights using Gemini
+        st.markdown("---")
+        st.markdown("#### 🤖 AI Insights for Bias Reduction")
+        
+        with st.spinner("Generating AI-powered recommendations..."):
+            try:
+                # Build fairness report from analysis
+                fairness_report = {
+                    "metrics": {
+                        "accuracy_before": before.get("accuracy", 0),
+                        "accuracy_after": after.get("accuracy", 0),
+                        "disparity_before": before.get("disparity", 0),
+                        "disparity_after": after.get("disparity", 0),
+                    },
+                    "disparity_analysis": {
+                        "risk_level": risk_summary.get("level", "Unknown"),
+                        "risk_score": risk_summary.get("score", 0),
+                    },
+                    "risk_factors": analysis.get("warnings", []),
+                }
+                
+                ai_insights = generate_bias_insights(fairness_report)
+                st.markdown(ai_insights)
+                
+                # Also provide specific suggestions for the sensitive column
+                if sensitive_column:
+                    disparity = before.get("disparity", 0)
+                    with st.expander(f"💡 Specific recommendations for '{sensitive_column}'"):
+                        suggestions = get_bias_reduction_suggestions(sensitive_column, disparity)
+                        st.markdown(suggestions)
+                        
+            except Exception as e:
+                st.info(f"AI insights currently unavailable. Run a fairness audit to enable this feature.")
 
         render_section_title(
             "Bias Warnings",
