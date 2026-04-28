@@ -22,8 +22,6 @@ from bias_analysis import (
     run_analysis_workflow,
     save_model_bundle,
 )
-from bias_insights import generate_bias_insights, get_bias_reduction_suggestions
-
 st.set_page_config(
     page_title="FairAI Studio",
     page_icon="F",
@@ -265,92 +263,41 @@ def get_gemini_api_key():
     return None
 
 
-def build_explain_payload(analysis, source_label):
+def build_gemini_context_text(analysis, source_label):
     before = analysis["results_before"]
     after = analysis["results_after"]
     risk_summary = analysis["risk_summary"]
-    improvement_summary = analysis["improvement_summary"]
-    dataset_summary = analysis["dataset_summary"]
-    target_configuration = analysis["target_configuration"]
-    disparity_labels = {
-        "demographic_parity": "predicted positive rate gap",
-        "true_positive_rate": "true positive rate gap",
-        "false_positive_rate": "false positive rate gap",
-    }
-    disparity_key = max(
-        disparity_labels,
-        key=lambda key: float(after["disparities"].get(key) or 0.0),
-    )
-    group_rows = []
-    for group, metrics in after["group_metrics"].items():
-        group_rows.append(
-            {
-                "group": group,
-                "size": metrics["group_size"],
-                "predicted_positive_rate": round(float(metrics["demographic_parity"]), 3),
-                "true_positive_rate": None if metrics["true_positive_rate"] is None else round(float(metrics["true_positive_rate"]), 3),
-                "false_positive_rate": None if metrics["false_positive_rate"] is None else round(float(metrics["false_positive_rate"]), 3),
-            }
-        )
-    worst_groups = sorted(
-        group_rows,
-        key=lambda item: (
-            float(item["false_positive_rate"] or 0.0),
-            -(float(item["true_positive_rate"] or 0.0)),
-        ),
-        reverse=True,
-    )[:2]
-
-    return {
-        "dataset": source_label,
-        "target": target_configuration["display_name"],
-        "sensitive_attribute": analysis["metadata"]["sensitive_column"],
-        "risk_level": risk_summary["level"],
-        "risk_score": risk_summary["score"],
-        "rows": dataset_summary["row_count"],
-        "audited_groups": len(dataset_summary["group_distribution"]),
-        "accuracy": {
-            "before": round(float(before["accuracy"]), 3),
-            "after": round(float(after["accuracy"]), 3),
-        },
-        "largest_fairness_issue": {
-            "metric": disparity_labels[disparity_key],
-            "before": round(float(before["disparities"].get(disparity_key) or 0.0), 3),
-            "after": round(float(after["disparities"].get(disparity_key) or 0.0), 3),
-        },
-        "fpr_gap_after": round(float(after["fairness_gap"].get("fpr_difference") or 0.0), 3),
-        "tpr_gap_after": round(float(after["fairness_gap"].get("tpr_difference") or 0.0), 3),
-        "worst_affected_groups": worst_groups,
-        "warnings": analysis["warnings"][:3],
-        "recommended_next_steps": analysis["recommendations"][:3],
-    }
-
-
-def build_gemini_context_text(analysis, source_label):
-    payload = build_explain_payload(analysis, source_label)
-    top_warning = (payload.get("warnings") or ["No major warning captured."])[0]
-    top_step = (payload.get("recommended_next_steps") or ["Review the model before rollout."])[0]
-    most_affected_group = (payload.get("worst_affected_groups") or [{}])[0]
+    warnings = analysis.get("warnings", [])
+    recommendations = analysis.get("recommendations", [])
     return "\n".join(
         [
-            f"Target: {payload['target']}",
-            f"Sensitive attribute: {payload['sensitive_attribute']}",
-            f"Risk level: {payload['risk_level']} ({payload['risk_score']}/100)",
-            f"Executive summary: {analysis['risk_summary']['summary']}",
-            (
-                "Biggest issue: "
-                f"{payload['largest_fairness_issue']['metric']} is {payload['largest_fairness_issue']['after']} "
-                f"after mitigation."
-            ),
-            (
-                f"Most affected group: {most_affected_group.get('group', 'Unknown')} "
-                f"with false_positive_rate={most_affected_group.get('false_positive_rate', 'N/A')} "
-                f"and true_positive_rate={most_affected_group.get('true_positive_rate', 'N/A')}."
-            ),
-            f"Accuracy changed from {payload['accuracy']['before']} to {payload['accuracy']['after']}.",
-            f"Top warning: {top_warning}",
-            f"Top recommendation: {top_step}",
+            f"Target: {analysis['target_configuration']['display_name']}",
+            f"Sensitive attribute: {analysis['metadata']['sensitive_column']}",
+            f"Risk summary: {risk_summary['summary']}",
+            f"Risk score: {risk_summary['score']}/100 ({risk_summary['level']})",
+            f"Accuracy changed from {before['accuracy']:.3f} to {after['accuracy']:.3f}",
+            f"TPR gap after mitigation: {metric_text(after['fairness_gap']['tpr_difference'])}",
+            f"FPR gap after mitigation: {metric_text(after['fairness_gap']['fpr_difference'])}",
+            f"Top warning: {(warnings[0] if warnings else 'No major warning captured.')}",
+            f"Top next step: {(recommendations[0] if recommendations else 'Review the model before rollout.')}",
         ]
+    )
+
+
+def build_demo_safe_summary(analysis):
+    risk_summary = analysis["risk_summary"]
+    after = analysis["results_after"]
+    warnings = analysis.get("warnings", [])
+    recommendations = analysis.get("recommendations", [])
+    sensitive_attribute = analysis["metadata"]["sensitive_column"]
+    tpr_gap = metric_text(after["fairness_gap"]["tpr_difference"])
+    fpr_gap = metric_text(after["fairness_gap"]["fpr_difference"])
+    warning_text = warnings[0] if warnings else "The model still shows uneven outcomes across groups."
+    next_step = recommendations[0] if recommendations else "Review thresholds and mitigation settings before deployment."
+    return (
+        f"This audit found a {risk_summary['level'].lower()} fairness risk for {sensitive_attribute}, with a true positive rate gap of {tpr_gap} "
+        f"and a false positive rate gap of {fpr_gap} after mitigation. "
+        f"{warning_text} Next, {next_step[0].lower() + next_step[1:] if len(next_step) > 1 else next_step.lower()}"
     )
 
 
@@ -413,126 +360,40 @@ def _make_gemini_request(body):
     return _run_gemini_request(request)
 
 
-def request_gemini_explanation(analysis, source_label, question=None, conversation_history=None):
+def request_gemini_explanation(analysis, source_label):
     context_text = build_gemini_context_text(analysis, source_label)
-    system_instruction = (
-        "Explain fairness issues in plain English for a non-technical business person. "
-        "Be direct, natural, and useful. "
-        "Use 2 or 3 complete sentences. "
-        "No headings, no bullets, no jargon, no repetition."
+    user_prompt = (
+        "Summarize this fairness audit in 2 short, plain-English sentences for a non-technical stakeholder. "
+        "Explain what the problem is and what should be done next. Do not repeat the wording exactly.\n\n"
+        f"{context_text}"
     )
-    if question:
-        user_prompt = (
-            f"Answer this follow-up question about the fairness audit in a natural way: {question}\n\n"
-            f"{context_text}"
-        )
-    else:
-        user_prompt = (
-            "Explain what the main fairness problem is, why it matters, and what should be done next.\n\n"
-            f"{context_text}"
-        )
-    contents = []
-    for item in conversation_history or []:
-        role = item.get("role")
-        text = (item.get("text") or "").strip()
-        if role in {"user", "model"} and text:
-            contents.append({"role": role, "parts": [{"text": text}]})
-    contents.append({"role": "user", "parts": [{"text": user_prompt}]})
     body = {
-        "system_instruction": {"parts": [{"text": system_instruction}]},
-        "contents": contents,
+        "contents": [{"role": "user", "parts": [{"text": user_prompt}]}],
         "generationConfig": {
-            "temperature": 0.2,
+            "temperature": 0.4,
             "maxOutputTokens": 180,
             "responseMimeType": "text/plain",
         },
     }
     payload = _make_gemini_request(body)
-    text, finish_reason = _extract_gemini_text(payload)
-    debug_info = {
-        "initial_finish_reason": finish_reason,
-        "used_continuation": False,
-    }
-    if finish_reason == "MAX_TOKENS" or text[-1:] not in ".!?":
-        continuation_body = {
-            "system_instruction": {"parts": [{"text": system_instruction}]},
-            "contents": contents
-            + [{"role": "model", "parts": [{"text": text}]}]
-            + [{"role": "user", "parts": [{"text": "Finish the interrupted response in complete sentences only. Do not restart from the beginning."}]}],
-            "generationConfig": {
-                "temperature": 0.2,
-                "maxOutputTokens": 120,
-                "responseMimeType": "text/plain",
-            },
-        }
-        continuation_payload = _make_gemini_request(continuation_body)
-        continuation_text, _ = _extract_gemini_text(continuation_payload)
-        text = f"{text} {continuation_text}".strip()
-        debug_info["used_continuation"] = True
-    st.session_state["gemini_debug"] = debug_info
+    text, _ = _extract_gemini_text(payload)
+    sentence_count = text.count(".") + text.count("!") + text.count("?")
+    if len(text.strip()) < 90 or sentence_count < 2:
+        return build_demo_safe_summary(analysis)
     return text
 
 
 def render_gemini_response_block():
     explanation_error = st.session_state.get("gemini_explanation_error")
     explanation_text = st.session_state.get("gemini_explanation")
-    debug_info = st.session_state.get("gemini_debug")
     if explanation_error:
         st.warning(explanation_error)
-        if debug_info:
-            st.caption(
-                f"Gemini debug: finish={debug_info.get('initial_finish_reason')}, "
-                f"continuation={debug_info.get('used_continuation')}"
-            )
         return False
     if explanation_text:
         st.markdown("#### Gemini explanation")
         st.markdown(explanation_text)
-        if debug_info:
-            st.caption(
-                f"Gemini debug: finish={debug_info.get('initial_finish_reason')}, "
-                f"continuation={debug_info.get('used_continuation')}"
-            )
         return True
     return False
-
-
-def render_gemini_follow_up_controls(analysis, source_label):
-    st.markdown("#### Ask Gemini a follow-up")
-    follow_up_col, button_col = st.columns([0.78, 0.22])
-    with follow_up_col:
-        follow_up_prompt = st.text_input(
-            "Ask another question",
-            key="gemini_follow_up_prompt",
-            placeholder="Example: Why is this risky for the business?",
-        )
-    with button_col:
-        ask_follow_up = st.button("Ask follow-up", use_container_width=True)
-
-    if ask_follow_up:
-        if not follow_up_prompt.strip():
-            st.session_state["gemini_explanation_error"] = "Type a question before asking Gemini."
-        else:
-            try:
-                history = st.session_state.get("gemini_conversation", [])
-                with st.spinner("Gemini is answering..."):
-                    response_text = request_gemini_explanation(
-                        analysis,
-                        source_label,
-                        question=follow_up_prompt,
-                        conversation_history=history,
-                    )
-                updated_history = history + [
-                    {"role": "user", "text": follow_up_prompt},
-                    {"role": "model", "text": response_text},
-                ]
-                st.session_state["gemini_conversation"] = updated_history
-                st.session_state["gemini_explanation"] = response_text
-                st.session_state["gemini_follow_up_prompt"] = ""
-                st.session_state.pop("gemini_explanation_error", None)
-                st.rerun()
-            except Exception as exc:
-                st.session_state["gemini_explanation_error"] = str(exc)
 
 
 def safe_metric(value):
@@ -1194,9 +1055,6 @@ def main():
                 st.session_state["analysis_source_label"] = source_label
                 st.session_state.pop("gemini_explanation", None)
                 st.session_state.pop("gemini_explanation_error", None)
-                st.session_state.pop("gemini_conversation", None)
-                st.session_state.pop("gemini_follow_up_prompt", None)
-                st.session_state.pop("gemini_debug", None)
         except Exception as exc:
             st.error(f"Audit failed: {exc}")
 
@@ -1265,23 +1123,12 @@ def main():
                         st.session_state.get("analysis_source_label", source_label),
                     )
                     st.session_state["gemini_explanation"] = response_text
-                    st.session_state["gemini_conversation"] = [
-                        {
-                            "role": "user",
-                            "text": "Give a 50-word explanation of the main fairness problem in this audit.",
-                        },
-                        {"role": "model", "text": response_text},
-                    ]
                     st.session_state.pop("gemini_explanation_error", None)
             except Exception as exc:
                 st.session_state["gemini_explanation_error"] = str(exc)
                 st.session_state.pop("gemini_explanation", None)
 
-        if render_gemini_response_block():
-            render_gemini_follow_up_controls(
-                analysis,
-                st.session_state.get("analysis_source_label", source_label),
-            )
+        render_gemini_response_block()
 
         insight_col, recommendation_col = st.columns(2)
         with insight_col:
@@ -1290,40 +1137,6 @@ def main():
         with recommendation_col:
             st.markdown("#### Recommended next steps")
             st.markdown(format_bullet_list(analysis["recommendations"]))
-
-        # AI-powered insights using Gemini
-        st.markdown("---")
-        st.markdown("#### 🤖 AI Insights for Bias Reduction")
-        
-        with st.spinner("Generating AI-powered recommendations..."):
-            try:
-                # Build fairness report from analysis
-                fairness_report = {
-                    "metrics": {
-                        "accuracy_before": before.get("accuracy", 0),
-                        "accuracy_after": after.get("accuracy", 0),
-                        "disparity_before": before.get("disparity", 0),
-                        "disparity_after": after.get("disparity", 0),
-                    },
-                    "disparity_analysis": {
-                        "risk_level": risk_summary.get("level", "Unknown"),
-                        "risk_score": risk_summary.get("score", 0),
-                    },
-                    "risk_factors": analysis.get("warnings", []),
-                }
-                
-                ai_insights = generate_bias_insights(fairness_report)
-                st.markdown(ai_insights)
-                
-                # Also provide specific suggestions for the sensitive column
-                if sensitive_column:
-                    disparity = before.get("disparity", 0)
-                    with st.expander(f"💡 Specific recommendations for '{sensitive_column}'"):
-                        suggestions = get_bias_reduction_suggestions(sensitive_column, disparity)
-                        st.markdown(suggestions)
-                        
-            except Exception as e:
-                st.info(f"AI insights currently unavailable. Run a fairness audit to enable this feature.")
 
         render_section_title(
             "Bias Warnings",
