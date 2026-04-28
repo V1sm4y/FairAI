@@ -8,7 +8,7 @@ from pathlib import Path
 import google.generativeai as genai
 
 # Configure Gemini API with the provided key
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyB1jISZ3ddjiPgjc1yomdcnkz3P0ekuxxU")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyCZYvdpAYbkJEVSoF5RwhdBrCGXRx4JT0c")
 genai.configure(api_key=GEMINI_API_KEY)
 
 
