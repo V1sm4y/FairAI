@@ -81,6 +81,24 @@ python bias_analysis.py --load-model-dir saved_model --predict-csv new_applicant
 
 No secrets are required for the current app.
 
+## Optional Gemini Explanation Button
+
+FairAI can generate a plain-English explanation of the latest audit with Google's Gemini API.
+
+Add one of these to your Streamlit secrets or environment before launching the app:
+
+```toml
+GEMINI_API_KEY="your_api_key"
+```
+
+or
+
+```toml
+GOOGLE_API_KEY="your_api_key"
+```
+
+Then run an audit and click `Explain this with Gemini` in the Executive Summary.
+
 ## Responsible Use
 
 FairAI supports model auditing, monitoring, and documentation. It should not be used as the sole decision-maker for hiring, lending, healthcare, education, or other high-stakes outcomes.

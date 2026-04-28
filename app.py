@@ -1,6 +1,10 @@
 import io
 import json
+import os
 import tempfile
+import time
+import urllib.error
+import urllib.request
 import zipfile
 from html import escape
 from pathlib import Path
@@ -28,6 +32,7 @@ st.set_page_config(
 )
 
 SAMPLE_DATA_PATH = Path(__file__).resolve().parent / "sample_data.csv"
+GEMINI_MODEL = "gemini-2.5-flash"
 
 
 def inject_styles():
@@ -247,6 +252,287 @@ def render_section_title(title, body):
         """,
         unsafe_allow_html=True,
     )
+
+
+def get_gemini_api_key():
+    for key_name in ["GEMINI_API_KEY", "GOOGLE_API_KEY"]:
+        secret_value = st.secrets.get(key_name)
+        if secret_value:
+            return str(secret_value)
+        env_value = os.getenv(key_name)
+        if env_value:
+            return env_value
+    return None
+
+
+def build_explain_payload(analysis, source_label):
+    before = analysis["results_before"]
+    after = analysis["results_after"]
+    risk_summary = analysis["risk_summary"]
+    improvement_summary = analysis["improvement_summary"]
+    dataset_summary = analysis["dataset_summary"]
+    target_configuration = analysis["target_configuration"]
+    disparity_labels = {
+        "demographic_parity": "predicted positive rate gap",
+        "true_positive_rate": "true positive rate gap",
+        "false_positive_rate": "false positive rate gap",
+    }
+    disparity_key = max(
+        disparity_labels,
+        key=lambda key: float(after["disparities"].get(key) or 0.0),
+    )
+    group_rows = []
+    for group, metrics in after["group_metrics"].items():
+        group_rows.append(
+            {
+                "group": group,
+                "size": metrics["group_size"],
+                "predicted_positive_rate": round(float(metrics["demographic_parity"]), 3),
+                "true_positive_rate": None if metrics["true_positive_rate"] is None else round(float(metrics["true_positive_rate"]), 3),
+                "false_positive_rate": None if metrics["false_positive_rate"] is None else round(float(metrics["false_positive_rate"]), 3),
+            }
+        )
+    worst_groups = sorted(
+        group_rows,
+        key=lambda item: (
+            float(item["false_positive_rate"] or 0.0),
+            -(float(item["true_positive_rate"] or 0.0)),
+        ),
+        reverse=True,
+    )[:2]
+
+    return {
+        "dataset": source_label,
+        "target": target_configuration["display_name"],
+        "sensitive_attribute": analysis["metadata"]["sensitive_column"],
+        "risk_level": risk_summary["level"],
+        "risk_score": risk_summary["score"],
+        "rows": dataset_summary["row_count"],
+        "audited_groups": len(dataset_summary["group_distribution"]),
+        "accuracy": {
+            "before": round(float(before["accuracy"]), 3),
+            "after": round(float(after["accuracy"]), 3),
+        },
+        "largest_fairness_issue": {
+            "metric": disparity_labels[disparity_key],
+            "before": round(float(before["disparities"].get(disparity_key) or 0.0), 3),
+            "after": round(float(after["disparities"].get(disparity_key) or 0.0), 3),
+        },
+        "fpr_gap_after": round(float(after["fairness_gap"].get("fpr_difference") or 0.0), 3),
+        "tpr_gap_after": round(float(after["fairness_gap"].get("tpr_difference") or 0.0), 3),
+        "worst_affected_groups": worst_groups,
+        "warnings": analysis["warnings"][:3],
+        "recommended_next_steps": analysis["recommendations"][:3],
+    }
+
+
+def build_gemini_context_text(analysis, source_label):
+    payload = build_explain_payload(analysis, source_label)
+    top_warning = (payload.get("warnings") or ["No major warning captured."])[0]
+    top_step = (payload.get("recommended_next_steps") or ["Review the model before rollout."])[0]
+    most_affected_group = (payload.get("worst_affected_groups") or [{}])[0]
+    return "\n".join(
+        [
+            f"Target: {payload['target']}",
+            f"Sensitive attribute: {payload['sensitive_attribute']}",
+            f"Risk level: {payload['risk_level']} ({payload['risk_score']}/100)",
+            f"Executive summary: {analysis['risk_summary']['summary']}",
+            (
+                "Biggest issue: "
+                f"{payload['largest_fairness_issue']['metric']} is {payload['largest_fairness_issue']['after']} "
+                f"after mitigation."
+            ),
+            (
+                f"Most affected group: {most_affected_group.get('group', 'Unknown')} "
+                f"with false_positive_rate={most_affected_group.get('false_positive_rate', 'N/A')} "
+                f"and true_positive_rate={most_affected_group.get('true_positive_rate', 'N/A')}."
+            ),
+            f"Accuracy changed from {payload['accuracy']['before']} to {payload['accuracy']['after']}.",
+            f"Top warning: {top_warning}",
+            f"Top recommendation: {top_step}",
+        ]
+    )
+
+
+def _extract_gemini_text(payload):
+    candidates = payload.get("candidates") or []
+    for candidate in candidates:
+        content = candidate.get("content") or {}
+        parts = content.get("parts") or []
+        text = "".join(part.get("text", "") for part in parts if isinstance(part, dict))
+        if text.strip():
+            return text.strip(), candidate.get("finishReason")
+    raise RuntimeError("Gemini returned no explanation text.")
+
+
+def _run_gemini_request(request):
+    api_key = get_gemini_api_key()
+    if not api_key:
+        raise RuntimeError(
+            "Gemini is not configured yet. Add GEMINI_API_KEY or GOOGLE_API_KEY to Streamlit secrets or your environment."
+        )
+
+    last_error = None
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(request, timeout=45) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            return payload
+        except urllib.error.HTTPError as exc:
+            details = exc.read().decode("utf-8", errors="replace")
+            if exc.code == 429:
+                raise RuntimeError(
+                    "Gemini quota was exceeded for this API key. Wait and try again, or switch to a key/project with available quota."
+                ) from exc
+            if exc.code in {500, 503} and attempt < 2:
+                last_error = exc
+                time.sleep(2 * (attempt + 1))
+                continue
+            raise RuntimeError(f"Gemini request failed with HTTP {exc.code}: {details}") from exc
+        except urllib.error.URLError as exc:
+            if attempt < 2:
+                last_error = exc
+                time.sleep(2 * (attempt + 1))
+                continue
+            raise RuntimeError(f"Gemini request could not be reached: {exc.reason}") from exc
+
+    raise RuntimeError(f"Gemini request failed after retries: {last_error}")
+
+
+def _make_gemini_request(body):
+    api_key = get_gemini_api_key()
+    request = urllib.request.Request(
+        url=f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent",
+        data=json.dumps(body).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "x-goog-api-key": api_key,
+        },
+        method="POST",
+    )
+    return _run_gemini_request(request)
+
+
+def request_gemini_explanation(analysis, source_label, question=None, conversation_history=None):
+    context_text = build_gemini_context_text(analysis, source_label)
+    system_instruction = (
+        "Explain fairness issues in plain English for a non-technical business person. "
+        "Be direct, natural, and useful. "
+        "Use 2 or 3 complete sentences. "
+        "No headings, no bullets, no jargon, no repetition."
+    )
+    if question:
+        user_prompt = (
+            f"Answer this follow-up question about the fairness audit in a natural way: {question}\n\n"
+            f"{context_text}"
+        )
+    else:
+        user_prompt = (
+            "Explain what the main fairness problem is, why it matters, and what should be done next.\n\n"
+            f"{context_text}"
+        )
+    contents = []
+    for item in conversation_history or []:
+        role = item.get("role")
+        text = (item.get("text") or "").strip()
+        if role in {"user", "model"} and text:
+            contents.append({"role": role, "parts": [{"text": text}]})
+    contents.append({"role": "user", "parts": [{"text": user_prompt}]})
+    body = {
+        "system_instruction": {"parts": [{"text": system_instruction}]},
+        "contents": contents,
+        "generationConfig": {
+            "temperature": 0.2,
+            "maxOutputTokens": 180,
+            "responseMimeType": "text/plain",
+        },
+    }
+    payload = _make_gemini_request(body)
+    text, finish_reason = _extract_gemini_text(payload)
+    debug_info = {
+        "initial_finish_reason": finish_reason,
+        "used_continuation": False,
+    }
+    if finish_reason == "MAX_TOKENS" or text[-1:] not in ".!?":
+        continuation_body = {
+            "system_instruction": {"parts": [{"text": system_instruction}]},
+            "contents": contents
+            + [{"role": "model", "parts": [{"text": text}]}]
+            + [{"role": "user", "parts": [{"text": "Finish the interrupted response in complete sentences only. Do not restart from the beginning."}]}],
+            "generationConfig": {
+                "temperature": 0.2,
+                "maxOutputTokens": 120,
+                "responseMimeType": "text/plain",
+            },
+        }
+        continuation_payload = _make_gemini_request(continuation_body)
+        continuation_text, _ = _extract_gemini_text(continuation_payload)
+        text = f"{text} {continuation_text}".strip()
+        debug_info["used_continuation"] = True
+    st.session_state["gemini_debug"] = debug_info
+    return text
+
+
+def render_gemini_response_block():
+    explanation_error = st.session_state.get("gemini_explanation_error")
+    explanation_text = st.session_state.get("gemini_explanation")
+    debug_info = st.session_state.get("gemini_debug")
+    if explanation_error:
+        st.warning(explanation_error)
+        if debug_info:
+            st.caption(
+                f"Gemini debug: finish={debug_info.get('initial_finish_reason')}, "
+                f"continuation={debug_info.get('used_continuation')}"
+            )
+        return False
+    if explanation_text:
+        st.markdown("#### Gemini explanation")
+        st.markdown(explanation_text)
+        if debug_info:
+            st.caption(
+                f"Gemini debug: finish={debug_info.get('initial_finish_reason')}, "
+                f"continuation={debug_info.get('used_continuation')}"
+            )
+        return True
+    return False
+
+
+def render_gemini_follow_up_controls(analysis, source_label):
+    st.markdown("#### Ask Gemini a follow-up")
+    follow_up_col, button_col = st.columns([0.78, 0.22])
+    with follow_up_col:
+        follow_up_prompt = st.text_input(
+            "Ask another question",
+            key="gemini_follow_up_prompt",
+            placeholder="Example: Why is this risky for the business?",
+        )
+    with button_col:
+        ask_follow_up = st.button("Ask follow-up", use_container_width=True)
+
+    if ask_follow_up:
+        if not follow_up_prompt.strip():
+            st.session_state["gemini_explanation_error"] = "Type a question before asking Gemini."
+        else:
+            try:
+                history = st.session_state.get("gemini_conversation", [])
+                with st.spinner("Gemini is answering..."):
+                    response_text = request_gemini_explanation(
+                        analysis,
+                        source_label,
+                        question=follow_up_prompt,
+                        conversation_history=history,
+                    )
+                updated_history = history + [
+                    {"role": "user", "text": follow_up_prompt},
+                    {"role": "model", "text": response_text},
+                ]
+                st.session_state["gemini_conversation"] = updated_history
+                st.session_state["gemini_explanation"] = response_text
+                st.session_state["gemini_follow_up_prompt"] = ""
+                st.session_state.pop("gemini_explanation_error", None)
+                st.rerun()
+            except Exception as exc:
+                st.session_state["gemini_explanation_error"] = str(exc)
 
 
 def safe_metric(value):
@@ -906,6 +1192,11 @@ def main():
                     random_state=int(random_state),
                 )
                 st.session_state["analysis_source_label"] = source_label
+                st.session_state.pop("gemini_explanation", None)
+                st.session_state.pop("gemini_explanation_error", None)
+                st.session_state.pop("gemini_conversation", None)
+                st.session_state.pop("gemini_follow_up_prompt", None)
+                st.session_state.pop("gemini_debug", None)
         except Exception as exc:
             st.error(f"Audit failed: {exc}")
 
@@ -959,6 +1250,38 @@ def main():
             st.warning(risk_summary["summary"])
         else:
             st.success(risk_summary["summary"])
+
+        explain_clicked = st.button("Explain this with Gemini", use_container_width=True)
+        if get_gemini_api_key():
+            st.caption("Creates a plain-English explanation for a non-technical business stakeholder.")
+        else:
+            st.caption("Add `GEMINI_API_KEY` or `GOOGLE_API_KEY` in Streamlit secrets to enable the explanation button.")
+
+        if explain_clicked:
+            try:
+                with st.spinner("Asking Gemini to explain the audit..."):
+                    response_text = request_gemini_explanation(
+                        analysis,
+                        st.session_state.get("analysis_source_label", source_label),
+                    )
+                    st.session_state["gemini_explanation"] = response_text
+                    st.session_state["gemini_conversation"] = [
+                        {
+                            "role": "user",
+                            "text": "Give a 50-word explanation of the main fairness problem in this audit.",
+                        },
+                        {"role": "model", "text": response_text},
+                    ]
+                    st.session_state.pop("gemini_explanation_error", None)
+            except Exception as exc:
+                st.session_state["gemini_explanation_error"] = str(exc)
+                st.session_state.pop("gemini_explanation", None)
+
+        if render_gemini_response_block():
+            render_gemini_follow_up_controls(
+                analysis,
+                st.session_state.get("analysis_source_label", source_label),
+            )
 
         insight_col, recommendation_col = st.columns(2)
         with insight_col:
